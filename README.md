@@ -57,5 +57,4 @@ The `jupyter-user` image is based on `nvidia/cuda:13.0.3-cudnn-runtime-ubuntu22.
 
 ```bash
 docker compose build jupyter-user
-docker rm -f jupyter-<username>
 ```
