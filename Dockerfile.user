@@ -1,0 +1,39 @@
+FROM nvidia/cuda:13.0.3-cudnn-runtime-ubuntu22.04
+
+ENV SHELL=/bin/bash
+
+RUN apt update && apt install -y --no-install-recommends \
+    python3-pip \
+    unzip \
+    zip \
+    curl \
+    wget \
+    git \
+    vim \
+    htop \
+    less \
+    sudo
+
+RUN python3 -m pip install \
+    jupyterlab \
+    notebook \
+    jupyterhub \
+    duckdb \
+    torch \
+    torchvision \
+    numpy \
+    pandas \
+    matplotlib \
+    pyarrow \
+    scipy
+
+RUN python3 -m pip install \
+    plotly
+
+RUN useradd -m -s /bin/bash -u 1000 jovyan && \
+    echo "jovyan ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+
+USER jovyan
+WORKDIR /home/jovyan
+
+CMD ["jupyterhub-singleuser"]

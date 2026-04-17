@@ -1,0 +1,49 @@
+services:
+  jupyterhub:
+    build:
+      context: .
+      dockerfile: ./Dockerfile.jhub
+      network: host
+    image: jupyterhub
+    container_name: jupyterhub
+    networks:
+      - jhub_net
+    ipc: host
+    privileged: true
+    gpus: all
+
+    ports:
+      - "8000:8000"
+
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./jupyterhub_config.py:/srv/jupyterhub/jupyterhub_config.py
+      - ./jhub_data:/jhub_data:rw
+
+    environment:
+      - NVIDIA_DRIVER_CAPABILITIES=all
+      - SHARED_DIR=${SHARED_DIR}
+      - PARQUETS_DIR=${PARQUETS_DIR}
+
+    working_dir: /jhub_data
+
+    tty: true
+    stdin_open: true
+    entrypoint: ["jupyterhub", "-f", "/srv/jupyterhub/jupyterhub_config.py"]
+
+    restart: always
+
+  jupyter-user:
+    build:
+      context: .
+      dockerfile: ./Dockerfile.user
+      network: host
+    image: jupyter-user
+    profiles: ["build-only"]
+    networks:
+      - jhub_net
+
+networks:
+  jhub_net:
+    name: jhub_net

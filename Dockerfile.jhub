@@ -1,0 +1,8 @@
+FROM quay.io/jupyterhub/jupyterhub:latest
+
+RUN apt update && apt install -y --no-install-recommends \
+    python3-pip
+
+RUN pip install \
+    dockerspawner \
+    jupyterhub-nativeauthenticator
