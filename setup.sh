@@ -2,9 +2,8 @@
 
 set -e
 
-if [ $# -lt 1 ]; then
-    echo "Usage: $0 <parquets_dir>"
-    echo "  parquets_dir — directory with parquet files"
+if [ $# -lt 2 ]; then
+    echo "Usage: $0 <parquets_dir> <minio_secret_file>"
     exit 1
 fi
 
@@ -12,6 +11,8 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 SHARED_DIR="$SCRIPT_DIR/jhub_data/shared"
 SSL_DIR="$SCRIPT_DIR/jhub_data/ssl"
 PARQUETS_DIR="$1"
+MINIO_SECRET="$2"
+MINIO_CREDENTIALS_FILE="$SCRIPT_DIR/jhub_data/.minio_credentials"
 
 echo "Checking shared directory..."
 if [ ! -d "$SHARED_DIR" ]; then
@@ -22,6 +23,11 @@ else
 fi
 chown 1000:1000 "$SHARED_DIR"
 find "$SHARED_DIR" -maxdepth 1 -mindepth 1 -type d -exec chown 1000:1000 {} \;
+
+echo "Copying MinIO credentials..."
+sudo cp "$MINIO_SECRET" "$MINIO_CREDENTIALS_FILE"
+sudo chown 1000:1000 "$MINIO_CREDENTIALS_FILE"
+sudo chmod 600 "$MINIO_CREDENTIALS_FILE"
 
 echo "Checking SSL certificate..."
 if [ ! -f "$SSL_DIR/server.crt" ] || [ ! -f "$SSL_DIR/server.key" ]; then
@@ -47,6 +53,7 @@ echo "Writing .env..."
 cat > .env <<EOF
 SHARED_DIR=$SHARED_DIR
 PARQUETS_DIR=$PARQUETS_DIR
+MINIO_CREDENTIALS_FILE=$MINIO_CREDENTIALS_FILE
 EOF
 
 echo "Building images..."
