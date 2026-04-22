@@ -21,16 +21,14 @@ c.DockerSpawner.name_template = "jupyter-{username}"
 c.DockerSpawner.pull_policy = 'never'
 
 shared_dir = os.environ.get('SHARED_DIR', f'{os.environ["HOME"]}/jupyterhub/jhub_data/shared')
-parquets_dir = os.environ.get('PARQUETS_DIR', f'{os.environ["HOME"]}/parquets')
-minio_creds = os.environ.get('MINIO_CREDENTIALS_FILE', '')
+lakefs_creds = os.environ.get('LAKEFS_CREDENTIALS_FILE', '')
 
 c.DockerSpawner.volumes = {
     shared_dir: '/home/jovyan/work',
-    parquets_dir: '/home/jovyan/work/parquets',
 }
 
-if minio_creds:
-    c.DockerSpawner.volumes[minio_creds] = {'bind': '/home/jovyan/.minio_credentials', 'mode': 'ro'}
+if lakefs_creds:
+    c.DockerSpawner.volumes[lakefs_creds] = {'bind': '/home/jovyan/.lakefs_credentials', 'mode': 'ro'}
 
 c.DockerSpawner.notebook_dir = '/home/jovyan/work'
 

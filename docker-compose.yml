@@ -24,8 +24,7 @@ services:
     environment:
       - NVIDIA_DRIVER_CAPABILITIES=all
       - SHARED_DIR=${SHARED_DIR}
-      - PARQUETS_DIR=${PARQUETS_DIR}
-      - MINIO_CREDENTIALS_FILE=${MINIO_CREDENTIALS_FILE}
+      - LAKEFS_CREDENTIALS_FILE=${LAKEFS_CREDENTIALS_FILE}
 
     working_dir: /jhub_data
 
