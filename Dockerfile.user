@@ -1,4 +1,4 @@
-FROM nvidia/cuda:13.0.3-cudnn-runtime-ubuntu22.04
+FROM ros:humble-perception-jammy
 
 ENV SHELL=/bin/bash
 
@@ -22,8 +22,9 @@ RUN python3 -m pip install \
     jupyterhub \
     duckdb \
     minio \
-    torch \
-    torchvision \
+    boto3 \
+    # torch \
+    # torchvision \
     numpy \
     pandas \
     matplotlib \

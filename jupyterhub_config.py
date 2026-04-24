@@ -46,11 +46,7 @@ c.Spawner.http_timeout = 120
 c.Spawner.start_timeout = 120
 
 c.DockerSpawner.extra_host_config = {
-    "device_requests": [
-        {
-            "Driver": "nvidia",
-            "Count": -1,
-            "Capabilities": [["gpu"]],
-        }
-    ]
+    "extra_hosts": {
+        "host.docker.internal": "host-gateway"
+    }
 }
