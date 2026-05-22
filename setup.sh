@@ -46,6 +46,14 @@ else
     echo "  OK: $SSL_DIR"
 fi
 
+if [ -d "database_parser" ]; then
+    echo "database_parser already exists"
+else
+    git clone git@192.168.31.177:robolab/navigation/database_parser.git 
+fi
+
+cp -r database_parser/notebooks/* jhub_data/shared
+
 echo "Writing .env..."
 cat > .env <<EOF
 SHARED_DIR=$SHARED_DIR
@@ -60,3 +68,4 @@ echo "Starting JupyterHub..."
 docker compose up -d
 
 echo "Done. JupyterHub is running at https://localhost:8000"
+

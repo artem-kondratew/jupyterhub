@@ -1,4 +1,5 @@
 .env
 jhub_data
 lakectl.yaml
+database_parser
 

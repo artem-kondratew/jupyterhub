@@ -14,7 +14,10 @@ RUN apt update && apt install -y --no-install-recommends \
     less \
     sudo \
     iproute2 \
-    iputils-ping
+    iputils-ping \
+    tree
+
+RUN python3 -m pip install --upgrade pip setuptools
 
 RUN python3 -m pip install \
     jupyterlab \
@@ -29,10 +32,13 @@ RUN python3 -m pip install \
     pandas \
     matplotlib \
     pyarrow \
-    scipy
+    scipy \
+    tqdm \
+    plotly \
+    pyproj
 
-RUN python3 -m pip install \
-    plotly
+COPY database_parser /opt/database_parser
+RUN python3 -m pip install --no-cache-dir -e /opt/database_parser
 
 RUN useradd -m -s /bin/bash -u 1000 jovyan && \
     echo "jovyan ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
@@ -41,3 +47,4 @@ USER jovyan
 WORKDIR /home/jovyan
 
 CMD ["jupyterhub-singleuser"]
+
